@@ -1,17 +1,15 @@
 import telebot
+from googletrans import Translator
 
-bot = telebot.TeleBot('YOURTOKEN')
-
-@bot.message_handler(commands=['start'])
-def start_message(message):
-    bot.send_message(message.chat.id, 'Привет, ты написал мне /start')
-
+translator = Translator()
+bot = telebot.TeleBot('1001004694:AAHaLKSS0oz86QYnQqtuWm02aNcqY03m6Gc')
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
-    if message.text.lower() == 'привет':
-        bot.send_message(message.chat.id, 'Привет, мой создатель')
-    else:
-    	bot.send_message(message.chat.id, message.text)
+
+    language = translator.detect(message.text).lang
+    temp = translator.translate(message.text, dest='fr').text
+    temp = translator.translate(temp, dest=language).text
+    bot.send_message(message.chat.id, temp)
 
 bot.polling()
